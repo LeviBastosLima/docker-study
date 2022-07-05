@@ -1,0 +1,5 @@
+FROM ubuntu:latest
+
+ENTRYPOINT [ "echo", "Weslley" ] # Esse comenado é fixo, mesmo que mude no CLI
+
+CMD [ "echo", "Hello World" ] # Esse comando pode ser substitudo no CLI
