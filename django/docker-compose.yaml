@@ -1,0 +1,51 @@
+version: '3.3'
+
+services:
+  
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: django_app
+    container_name: django_app
+    tty: true
+    networks:
+      - django_app_network
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    volumes:
+      - type: bind
+        source: /home/gupy/study/docker/django
+        target: /app
+
+  pg_admin:
+    image: dpage/pgadmin4
+    depends_on:
+      - db
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=lebaliro10@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=123
+    ports:
+      - '443:443'
+      - '80:80'
+    networks:
+      - django_app_network
+
+  db:
+    image: postgres:11
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    container_name: django_db
+    networks:
+      - django_app_network
+    ports:
+      - '5432:5432'
+
+networks:
+  django_app_network:
+    driver: bridge

@@ -1,0 +1,12 @@
+FROM python:3.9 AS builder
+
+WORKDIR /app
+
+RUN pip install Django==4.0.6
+
+
+FROM python:alpine3.9
+WORKDIR /app
+COPY --from=builder . .
+EXPOSE 8000
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
